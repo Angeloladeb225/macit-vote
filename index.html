@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Vote MACIT — Assurance complémentaire SUNU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F0F4F8;min-height:100vh;padding:1.5rem 1rem 3rem}
+.page{max-width:680px;margin:0 auto}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0C3B6E 0%,#1A6BBF 100%);border-radius:18px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;box-shadow:0 6px 24px rgba(12,59,110,0.22)}
+.header-logos{display:flex;align-items:center;gap:12px}
+.header-logo{height:50px;width:auto;object-fit:contain}
+.header-logo-cit{height:26px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:0.85}
+.header-divider{width:1px;height:38px;background:rgba(255,255,255,0.25)}
+.header-text{flex:1;text-align:right}
+.header-text h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:-0.01em;line-height:1.3}
+.header-text p{font-size:11.5px;color:rgba(255,255,255,0.6);margin-top:3px}
+
+/* CARD */
+.card{background:#fff;border:1px solid #E2EAF2;border-radius:16px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 6px rgba(0,0,0,0.04)}
+.card-title{font-size:13.5px;font-weight:600;color:#1A2A3A;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.card-title i{font-size:16px;color:#1A6BBF}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:1rem;background:#F0F4F8;padding:4px;border-radius:10px}
+.tab{flex:1;font-size:12px;font-weight:500;padding:6px 8px;border-radius:8px;border:none;background:transparent;color:#5A7A9A;cursor:pointer;transition:all .15s;font-family:inherit}
+.tab.active{background:#0C3B6E;color:#fff;box-shadow:0 1px 4px rgba(12,59,110,0.2)}
+
+/* TABLE */
+.prestation-table{width:100%;border-collapse:collapse;font-size:12px}
+.prestation-table th{background:#F0F4F8;padding:8px 10px;text-align:left;font-weight:600;color:#5A7A9A;border-bottom:1px solid #E2EAF2;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.prestation-table td{padding:8px 10px;border-bottom:1px solid #E2EAF2;color:#1A2A3A;vertical-align:top;line-height:1.5}
+.prestation-table tr:last-child td{border-bottom:none}
+.amt{font-weight:700;color:#0C3B6E}
+.amt-green{font-weight:700;color:#1B6B3A}
+.nc{color:#9AAABB;font-style:italic;font-size:11px}
+.total-row td{font-weight:600;font-size:12px;background:#F0F4F8}
+.note-box{background:#FFF8E1;border-left:3px solid #F9A825;border-radius:0 10px 10px 0;padding:9px 13px;margin-top:12px;font-size:12px;color:#6D4C00;line-height:1.5}
+
+/* BANNER */
+.vote-banner{background:#EEF4FB;border:1px solid #BAD3EF;border-radius:10px;padding:9px 13px;margin-bottom:1rem;font-size:12px;color:#0C3B6E;display:flex;align-items:center;gap:8px}
+.vote-banner i{flex-shrink:0}
+
+/* VOTE BUTTONS */
+.vote-row{display:flex;gap:10px;margin-bottom:8px}
+.vote-btn{flex:1;padding:15px 10px;border:1.5px solid #E2EAF2;border-radius:12px;cursor:pointer;text-align:center;background:#fff;transition:all .15s;font-family:inherit}
+.vote-btn:hover{border-color:#1A6BBF;background:#F5F9FF}
+.vote-btn.sel-oui{border:2px solid #1A6BBF;background:#EEF4FB}
+.vote-btn.sel-non{border:2px solid #C62828;background:#FFF5F5}
+.vote-btn.sel-a{border:2px solid #1A6BBF;background:#EEF4FB}
+.vote-btn.sel-b{border:2px solid #1B6B3A;background:#F1F8E9}
+.vote-icon{font-size:22px;margin-bottom:5px}
+.vote-icon-oui{color:#1A6BBF}
+.vote-icon-non{color:#C62828}
+.vote-icon-a{color:#1A6BBF}
+.vote-icon-b{color:#1B6B3A}
+.vote-lbl{font-size:13px;font-weight:600;color:#1A2A3A}
+.vote-sub{font-size:11px;color:#5A7A9A;margin-top:3px;line-height:1.4}
+.hidden{display:none}
+.divider{border-top:1px solid #E2EAF2;margin:1rem 0}
+.sub-q-title{font-size:13px;font-weight:600;color:#1A2A3A;margin-bottom:4px}
+.sub-q-sub{font-size:11.5px;color:#5A7A9A;margin-bottom:10px}
+
+/* FIELDS */
+.field-label{font-size:12.5px;font-weight:500;color:#1A2A3A;margin-bottom:5px}
+input[type=text],input[type=password],textarea{width:100%;font-size:13px;padding:9px 12px;border:1.5px solid #D0DCE8;border-radius:9px;background:#fff;color:#1A2A3A;margin-bottom:10px;outline:none;transition:border .15s;font-family:inherit}
+input:focus,textarea:focus{border-color:#1A6BBF}
+textarea{resize:vertical}
+
+/* RECAP */
+.recap-box{background:#F1F8E9;border:1px solid #A5D6A7;border-radius:10px;padding:10px 14px;font-size:12px;color:#1B6B3A;display:flex;align-items:center;gap:8px}
+
+/* SUBMIT */
+.btn-submit{width:100%;padding:13px;background:linear-gradient(135deg,#0C3B6E,#1A6BBF);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;margin-top:.5rem;box-shadow:0 2px 10px rgba(12,59,110,0.25);transition:opacity .15s;font-family:inherit}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.notice{font-size:11.5px;color:#7A9AB0;text-align:center;margin-top:10px;line-height:1.5}
+
+/* SUCCESS */
+.success{display:none;background:#F1F8E9;border:1px solid #A5D6A7;border-radius:16px;padding:2.5rem;text-align:center}
+.success i{font-size:44px;color:#1B6B3A}
+.success h2{font-size:18px;font-weight:700;color:#1B5E20;margin:12px 0 6px}
+.success p{font-size:13px;color:#2E7D32;line-height:1.6}
+
+/* STATUS */
+.status-msg{padding:9px 13px;border-radius:9px;font-size:12.5px;margin-top:10px;display:none}
+.status-err{background:#FFF5F5;border:1px solid #FFCDD2;color:#C62828}
+.status-ok{background:#F1F8E9;border:1px solid #A5D6A7;color:#1B6B3A}
+
+/* ADMIN */
+.admin-section{margin-top:2rem;border-top:1px solid #E2EAF2;padding-top:1.5rem}
+.admin-toggle{font-size:12.5px;color:#7A9AB0;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500}
+.admin-panel{display:none;margin-top:1rem}
+.admin-login{display:flex;gap:8px;margin-bottom:1rem}
+.admin-login input{flex:1;margin-bottom:0}
+.admin-login button{padding:9px 16px;background:#0C3B6E;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.stat-card{background:#F0F4F8;border-radius:10px;padding:11px 14px}
+.stat-card .s-num{font-size:26px;font-weight:700;color:#0C3B6E;letter-spacing:-0.02em}
+.stat-card .s-lbl{font-size:11px;color:#7A9AB0;margin-top:2px}
+.section-head{font-size:12.5px;font-weight:600;color:#1A2A3A;margin:16px 0 10px;letter-spacing:-.01em}
+.vote-result-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.vr-label{font-size:12px;color:#1A2A3A;min-width:185px}
+.vr-bar-wrap{flex:1}
+.vr-bg{background:#E2EAF2;border-radius:5px;height:8px;overflow:hidden}
+.vr-fill-oui{height:100%;background:#1A6BBF;border-radius:5px;transition:width .5s}
+.vr-fill-non{height:100%;background:#C62828;border-radius:5px;transition:width .5s}
+.vr-fill-a{height:100%;background:#1A6BBF;border-radius:5px;transition:width .5s}
+.vr-fill-b{height:100%;background:#1B6B3A;border-radius:5px;transition:width .5s}
+.vr-pct{font-size:11.5px;color:#7A9AB0;min-width:52px;text-align:right;font-weight:500}
+.verdict{border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.verdict-oui{background:#EEF4FB;color:#0C3B6E;border:1px solid #BAD3EF}
+.verdict-non{background:#FFF5F5;color:#C62828;border:1px solid #FFCDD2}
+.verdict-egal{background:#FFF8E1;color:#6D4C00;border:1px solid #FFE082}
+.detail-item{font-size:12px;padding:9px 12px;background:#F0F4F8;border-radius:9px;margin-bottom:6px;line-height:1.6}
+.admin-btns{display:flex;gap:8px;margin-top:10px}
+.btn-export{flex:1;font-size:12.5px;color:#1A6BBF;background:none;border:1.5px solid #1A6BBF;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:500;font-family:inherit;transition:background .15s}
+.btn-export:hover{background:#EEF4FB}
+.btn-reset{flex:1;font-size:12.5px;color:#C62828;background:none;border:1.5px solid #C62828;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:500;font-family:inherit;transition:background .15s}
+.btn-reset:hover{background:#FFF5F5}
+.loading-indicator{text-align:center;padding:20px;font-size:12.5px;color:#7A9AB0}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-logos">
+      <img id="logo-macit" class="header-logo" src="" alt="MACIT" style="display:none"/>
+      <div class="header-divider" id="hdr-div" style="display:none"></div>
+      <img id="logo-cit" class="header-logo-cit" src="" alt="CIT" style="display:none"/>
+      <span id="hdr-fallback" style="font-size:20px;font-weight:700;color:#fff;letter-spacing:.05em">MACIT</span>
+    </div>
+    <div class="header-text">
+      <h1>Vote collectif — Assurance SUNU</h1>
+      <p>Mutuelle des Agents de Côte d'Ivoire Terminal</p>
+    </div>
+  </div>
+
+  <div id="form-section">
+
+    <!-- CONTEXTE -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-info-circle"></i> Contexte & Prestations en cas de décès</div>
+      <p style="font-size:13px;color:#5A7A9A;line-height:1.65;margin-bottom:1rem">
+        La MACIT envisage de souscrire à une assurance complémentaire auprès de <strong style="color:#0C3B6E">SUNU</strong>, spécifiquement pour les <strong style="color:#0C3B6E">cas de décès</strong>. Votre vote déterminera la décision finale pour <strong>l'ensemble des mutualistes</strong>. La majorité l'emporte.
+      </p>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('all')">Tous les cas</button>
+        <button class="tab" onclick="showTab('optA')">Option A</button>
+        <button class="tab" onclick="showTab('optB')">Option B</button>
+      </div>
+
+      <div id="tab-all">
+        <table class="prestation-table">
+          <thead><tr><th style="width:32%">Cas de décès</th><th>MACIT seule</th><th>Option A<br><span style="font-weight:400;font-size:10px;text-transform:none">5 800 F/mois</span></th><th>Option B<br><span style="font-weight:400;font-size:10px;text-transform:none">5 400 F/mois</span></th></tr></thead>
+          <tbody>
+            <tr><td>Décès du membre actif</td><td><span class="amt-green">1 000 000 F</span></td><td><span class="amt">2 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 1 000 000 MACIT = <strong>3 000 000 F</strong></span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 1 000 000 MACIT = <strong>2 000 000 F</strong></span></td></tr>
+            <tr><td>Décès du/de la conjoint(e)</td><td><span class="amt-green">500 000 F</span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 500 000 MACIT = <strong>1 500 000 F</strong></span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 500 000 MACIT = <strong>1 500 000 F</strong></span></td></tr>
+            <tr><td>Décès d'un parent<br><span style="font-size:10.5px;color:#7A9AB0">(père ou mère)</span></td><td><span class="amt-green">500 000 F</span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 500 000 MACIT = <strong>1 500 000 F</strong></span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 500 000 MACIT = <strong>1 500 000 F</strong></span></td></tr>
+            <tr><td>Décès d'un beau-parent</td><td><span class="nc">Non couvert</span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">SUNU uniquement</span></td><td><span class="amt">1 000 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">SUNU uniquement</span></td></tr>
+            <tr><td>Décès d'un enfant<br><span style="font-size:10.5px;color:#7A9AB0">(max 6 enfants)</span></td><td><span class="amt-green">250 000 F</span></td><td><span class="amt">500 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 250 000 MACIT = <strong>750 000 F</strong></span></td><td><span class="amt">500 000 F</span><br><span style="font-size:10.5px;color:#7A9AB0">+ 250 000 MACIT = <strong>750 000 F</strong></span></td></tr>
+          </tbody>
+        </table>
+        <div class="note-box">⚠️ Les totaux MACIT + SUNU s'appliquent si la majorité vote Oui aux deux questions ci-dessous.</div>
+      </div>
+
+      <div id="tab-optA" style="display:none">
+        <table class="prestation-table">
+          <thead><tr><th>Cas de décès</th><th>SUNU Option A</th><th>MACIT</th><th>Total combiné</th></tr></thead>
+          <tbody>
+            <tr><td>Décès du membre actif</td><td><span class="amt">2 000 000 F</span></td><td><span class="amt-green">1 000 000 F</span></td><td><strong>3 000 000 F</strong></td></tr>
+            <tr><td>Décès du/de la conjoint(e)</td><td><span class="amt">1 000 000 F</span></td><td><span class="amt-green">500 000 F</span></td><td><strong>1 500 000 F</strong></td></tr>
+            <tr><td>Décès d'un parent</td><td><span class="amt">1 000 000 F</span></td><td><span class="amt-green">500 000 F</span></td><td><strong>1 500 000 F</strong></td></tr>
+            <tr><td>Décès d'un beau-parent</td><td><span class="amt">1 000 000 F</span></td><td><span class="nc">—</span></td><td><strong>1 000 000 F</strong></td></tr>
+            <tr><td>Décès d'un enfant (max 6)</td><td><span class="amt">500 000 F</span></td><td><span class="amt-green">250 000 F</span></td><td><strong>750 000 F</strong></td></tr>
+            <tr class="total-row"><td>Cotisation</td><td colspan="3" style="color:#C62828;font-weight:700">5 800 F CFA / mois / membre</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="tab-optB" style="display:none">
+        <table class="prestation-table">
+          <thead><tr><th>Cas de décès</th><th>SUNU Option B</th><th>MACIT</th><th>Total combiné</th></tr></thead>
+          <tbody>
+            <tr><td>Décès du membre actif</td><td><span class="amt">1 000 000 F</span></td><td><span class="amt-green">1 000 000 F</span></td><td><strong>2 000 000 F</strong></td></tr>
+            <tr><td>Décès du/de la conjoint(e)</td><td><span class="amt">1 000 000 F</span></td><td><span class="amt-green">500 000 F</span></td><td><strong>1 500 000 F</strong></td></tr>
+            <tr><td>Décès d'un parent</td><td><span class="amt">1 000 000 F</span></td><td><span class="amt-green">500 000 F</span></td><td><strong>1 500 000 F</strong></td></tr>
+            <tr><td>Décès d'un beau-parent</td><td><span class="amt">1 000 000 F</span></td><td><span class="nc">—</span></td><td><strong>1 000 000 F</strong></td></tr>
+            <tr><td>Décès d'un enfant (max 6)</td><td><span class="amt">500 000 F</span></td><td><span class="amt-green">250 000 F</span></td><td><strong>750 000 F</strong></td></tr>
+            <tr class="total-row"><td>Cotisation</td><td colspan="3" style="color:#C62828;font-weight:700">5 400 F CFA / mois / membre</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- IDENTITE -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-user"></i> Vos informations</div>
+      <div class="field-label">Nom & Prénom *</div>
+      <input type="text" id="nom" placeholder="Ex : Kouassi Jean-Marc"/>
+      <div class="field-label">Matricule *</div>
+      <input type="text" id="matricule" placeholder="Ex : CI-0182"/>
+    </div>
+
+    <!-- VOTE 1 -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-vote"></i> Vote 1 — La MACIT doit-elle souscrire à SUNU ?</div>
+      <div class="vote-banner"><i class="ti ti-alert-circle"></i> Vote collectif — la décision de la majorité s'applique à tous les mutualistes.</div>
+      <div class="vote-row">
+        <div class="vote-btn" id="btn-oui" onclick="selectQ1('oui')">
+          <div class="vote-icon vote-icon-oui"><i class="ti ti-thumb-up"></i></div>
+          <div class="vote-lbl">Oui</div>
+          <div class="vote-sub">Souscrire à SUNU en complément</div>
+        </div>
+        <div class="vote-btn" id="btn-non" onclick="selectQ1('non')">
+          <div class="vote-icon vote-icon-non"><i class="ti ti-thumb-down"></i></div>
+          <div class="vote-lbl">Non</div>
+          <div class="vote-sub">Rester sur la MACIT seule</div>
+        </div>
+      </div>
+
+      <div id="sunu-suite" class="hidden">
+        <div class="divider"></div>
+        <div class="sub-q-title">Quelle option SUNU ?</div>
+        <div class="sub-q-sub">L'option retenue par la majorité sera appliquée pour tous.</div>
+        <div class="vote-row">
+          <div class="vote-btn" id="btn-a" onclick="selectOpt('a')">
+            <div class="vote-icon vote-icon-a"><i class="ti ti-letter-a"></i></div>
+            <div class="vote-lbl">Option A</div>
+            <div class="vote-sub">Capital 2 000 000 F — 5 800 F/mois</div>
+          </div>
+          <div class="vote-btn" id="btn-b" onclick="selectOpt('b')">
+            <div class="vote-icon vote-icon-b"><i class="ti ti-letter-b"></i></div>
+            <div class="vote-lbl">Option B</div>
+            <div class="vote-sub">Capital 1 000 000 F — 5 400 F/mois</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="macit-suite" class="hidden">
+        <div class="divider"></div>
+        <div class="sub-q-title">Vote 2 — La MACIT doit-elle intervenir en complément de SUNU ?</div>
+        <div class="sub-q-sub">Vote collectif — la majorité décide pour tous.</div>
+        <div class="vote-row">
+          <div class="vote-btn" id="btn-macit-oui" onclick="selectQ2('oui')">
+            <div class="vote-icon vote-icon-oui"><i class="ti ti-thumb-up"></i></div>
+            <div class="vote-lbl">Oui</div>
+            <div class="vote-sub">MACIT + SUNU en cas de décès</div>
+          </div>
+          <div class="vote-btn" id="btn-macit-non" onclick="selectQ2('non')">
+            <div class="vote-icon vote-icon-non"><i class="ti ti-thumb-down"></i></div>
+            <div class="vote-lbl">Non</div>
+            <div class="vote-sub">SUNU seule pour les décès</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="macit-only-notice" class="hidden">
+        <div class="divider"></div>
+        <div class="recap-box"><i class="ti ti-circle-check"></i> Vous votez pour rester sur la <strong>MACIT seule</strong>. Aucune question supplémentaire.</div>
+      </div>
+    </div>
+
+    <!-- REMARQUES -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-message"></i> Remarques (optionnel)</div>
+      <textarea id="remarques" rows="3" placeholder="Commentaires, questions…"></textarea>
+    </div>
+
+    <div id="status-msg" class="status-msg"></div>
+    <button class="btn-submit" id="btn-submit" onclick="submitForm()">Soumettre mon vote</button>
+    <p class="notice">🔒 Votre vote est enregistré de façon sécurisée. Les résultats seront communiqués par le Bureau à l'issue du scrutin.</p>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="success-section">
+    <i class="ti ti-circle-check"></i>
+    <h2>Vote enregistré !</h2>
+    <p>Merci pour votre participation.<br>Le Bureau de la Mutuelle compilera les résultats et vous communiquera la décision finale.</p>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="admin-section">
+    <div class="admin-toggle" onclick="toggleAdmin()">
+      <i class="ti ti-lock"></i>
+      <span>Accès Bureau — Résultats du vote</span>
+      <i class="ti ti-chevron-down" id="chev"></i>
+    </div>
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-login" id="admin-login-row">
+        <input type="password" id="admin-pwd" placeholder="Mot de passe Bureau" onkeydown="if(event.key==='Enter')adminLogin()"/>
+        <button onclick="adminLogin()">Accéder</button>
+      </div>
+      <div id="admin-results" style="display:none"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── CONFIG SUPABASE ───────────────────────────────────────────
+const SUPA_URL = 'https://ijzuqicdlwhzomxndkzo.supabase.co';
+const SUPA_KEY = 'sb_publishable_OUDZLym4c8BL9NL3uHKJFg_PR2P6rGs';
+const ADMIN_PWD = 'macit2025';
+
+// ─── ÉTAT LOCAL ────────────────────────────────────────────────
+const sel = { q1: null, opt: null, q2: null };
+
+// ─── TABS ──────────────────────────────────────────────────────
+function showTab(t) {
+  ['all','optA','optB'].forEach(id => {
+    document.getElementById('tab-'+id).style.display = id===t ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el,i) => {
+    el.classList.toggle('active', ['all','optA','optB'][i]===t);
+  });
+}
+
+// ─── VOTE UI ───────────────────────────────────────────────────
+function selectQ1(val) {
+  sel.q1=val; sel.opt=null; sel.q2=null;
+  document.getElementById('btn-oui').className='vote-btn'+(val==='oui'?' sel-oui':'');
+  document.getElementById('btn-non').className='vote-btn'+(val==='non'?' sel-non':'');
+  ['btn-a','btn-b','btn-macit-oui','btn-macit-non'].forEach(id=>document.getElementById(id).className='vote-btn');
+  document.getElementById('sunu-suite').classList.toggle('hidden', val!=='oui');
+  document.getElementById('macit-suite').classList.add('hidden');
+  document.getElementById('macit-only-notice').classList.toggle('hidden', val!=='non');
+}
+
+function selectOpt(val) {
+  sel.opt=val;
+  document.getElementById('btn-a').className='vote-btn'+(val==='a'?' sel-a':'');
+  document.getElementById('btn-b').className='vote-btn'+(val==='b'?' sel-b':'');
+  document.getElementById('macit-suite').classList.remove('hidden');
+}
+
+function selectQ2(val) {
+  sel.q2=val;
+  document.getElementById('btn-macit-oui').className='vote-btn'+(val==='oui'?' sel-oui':'');
+  document.getElementById('btn-macit-non').className='vote-btn'+(val==='non'?' sel-non':'');
+}
+
+// ─── STATUS MSG ────────────────────────────────────────────────
+function showStatus(msg, type) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg;
+  el.className = 'status-msg ' + (type==='err' ? 'status-err' : 'status-ok');
+  el.style.display = 'block';
+}
+
+// ─── SUBMIT ────────────────────────────────────────────────────
+async function submitForm() {
+  const nom = document.getElementById('nom').value.trim();
+  const matricule = document.getElementById('matricule').value.trim().toUpperCase();
+
+  // Validations
+  if (!nom) { showStatus('⚠️ Le nom et prénom est obligatoire.','err'); return; }
+  if (!matricule) { showStatus('⚠️ Le matricule est obligatoire.','err'); return; }
+  if (!sel.q1) { showStatus('⚠️ Merci de voter sur la question 1.','err'); return; }
+  if (sel.q1==='oui' && !sel.opt) { showStatus('⚠️ Merci de choisir une option SUNU (A ou B).','err'); return; }
+  if (sel.q1==='oui' && !sel.q2) { showStatus('⚠️ Merci de voter sur l\'intervention de la MACIT.','err'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Vérification…';
+
+  try {
+    // Vérifier si ce matricule a déjà voté
+    const checkRes = await fetch(
+      SUPA_URL + '/rest/v1/votes?matricule=eq.' + encodeURIComponent(matricule) + '&select=id&limit=1',
+      { headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY } }
+    );
+    if (!checkRes.ok) throw new Error('Erreur de vérification');
+    const existing = await checkRes.json();
+    if (existing.length > 0) {
+      showStatus('❌ Le matricule ' + matricule + ' a déjà voté. Un seul vote par membre est autorisé.', 'err');
+      btn.disabled = false;
+      btn.textContent = 'Soumettre mon vote';
+      return;
+    }
+
+    btn.textContent = 'Enregistrement…';
+
+    const entry = {
+      nom,
+      matricule,
+      q1: sel.q1,
+      option_sunu: sel.opt || null,
+      q2: sel.q2 || null,
+      remarques: document.getElementById('remarques').value.trim() || null
+    };
+
+    const res = await fetch(SUPA_URL + '/rest/v1/votes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(entry)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || 'Erreur ' + res.status);
+    }
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-section').style.display = 'block';
+  } catch(e) {
+    showStatus('Erreur : ' + e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Soumettre mon vote';
+  }
+}
+
+// ─── ADMIN ─────────────────────────────────────────────────────
+function toggleAdmin() {
+  const p = document.getElementById('admin-panel');
+  const open = p.style.display === 'block';
+  p.style.display = open ? 'none' : 'block';
+  document.getElementById('chev').className = open ? 'ti ti-chevron-down' : 'ti ti-chevron-up';
+}
+
+function adminLogin() {
+  if (document.getElementById('admin-pwd').value === ADMIN_PWD) {
+    document.getElementById('admin-login-row').style.display = 'none';
+    document.getElementById('admin-results').style.display = 'block';
+    loadResults();
+  } else {
+    alert('Mot de passe incorrect.');
+  }
+}
+
+async function loadResults() {
+  const el = document.getElementById('admin-results');
+  el.innerHTML = '<div class="loading-indicator"><i class="ti ti-loader"></i> Chargement des votes…</div>';
+  try {
+    const res = await fetch(SUPA_URL + '/rest/v1/votes?select=*&order=created_at.desc', {
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY
+      }
+    });
+    if (!res.ok) throw new Error('Erreur ' + res.status);
+    const votes = await res.json();
+    renderResults(votes);
+  } catch(e) {
+    el.innerHTML = '<p style="font-size:12px;color:#C62828;padding:10px">Erreur de chargement : ' + e.message + '</p>';
+  }
+}
+
+function pct(n,t){ return t ? Math.round(n/t*100) : 0; }
+function barRow(label,count,total,fillClass) {
+  const p = pct(count,total||1);
+  return `<div class="vote-result-row"><div class="vr-label">${label}</div><div class="vr-bar-wrap"><div class="vr-bg"><div class="${fillClass}" style="width:${p}%"></div></div></div><div class="vr-pct">${count} (${p}%)</div></div>`;
+}
+function verdictBox(oui,non,lo,ln) {
+  if (oui===non) return `<div class="verdict verdict-egal"><i class="ti ti-scale"></i> Égalité — départage nécessaire</div>`;
+  return oui>non
+    ? `<div class="verdict verdict-oui"><i class="ti ti-trophy"></i> Majorité : ${lo} — ${oui} voix</div>`
+    : `<div class="verdict verdict-non"><i class="ti ti-trophy"></i> Majorité : ${ln} — ${non} voix</div>`;
+}
+
+function renderResults(votes) {
+  const total = votes.length;
+  const q1Oui = votes.filter(v=>v.q1==='oui').length;
+  const q1Non = votes.filter(v=>v.q1==='non').length;
+  const optA = votes.filter(v=>v.option_sunu==='a').length;
+  const optB = votes.filter(v=>v.option_sunu==='b').length;
+  const totalOpt = optA+optB;
+  const q2Oui = votes.filter(v=>v.q2==='oui').length;
+  const q2Non = votes.filter(v=>v.q2==='non').length;
+  const totalQ2 = q2Oui+q2Non;
+
+  let html = `
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <span style="font-size:13px;font-weight:600;color:#1A2A3A">${total} vote${total>1?'s':''} enregistré${total>1?'s':''}</span>
+    <button onclick="loadResults()" style="font-size:12px;color:#1A6BBF;background:none;border:none;cursor:pointer;font-family:inherit"><i class="ti ti-refresh"></i> Actualiser</button>
+  </div>
+  <div class="results-grid">
+    <div class="stat-card"><div class="s-num">${total}</div><div class="s-lbl">Votes total</div></div>
+    <div class="stat-card"><div class="s-num">${q1Oui}</div><div class="s-lbl">Favorables à SUNU</div></div>
+    <div class="stat-card"><div class="s-num">${q1Non}</div><div class="s-lbl">Pour MACIT seule</div></div>
+    <div class="stat-card"><div class="s-num">${totalOpt>0?(optA>=optB?'A':'B'):'—'}</div><div class="s-lbl">Option en tête</div></div>
+  </div>
+
+  <div class="section-head">Vote 1 — Souscription à SUNU</div>
+  ${total>0 ? verdictBox(q1Oui,q1Non,'Oui — Souscrire à SUNU','Non — Rester MACIT seule') : '<p style="font-size:12px;color:#7A9AB0;margin-bottom:10px">Aucun vote pour l\'instant.</p>'}
+  ${barRow('Oui — Souscrire à SUNU', q1Oui, total, 'vr-fill-oui')}
+  ${barRow('Non — Rester MACIT seule', q1Non, total, 'vr-fill-non')}
+
+  <div class="section-head">Option choisie <span style="font-weight:400;font-size:11px;color:#7A9AB0">(parmi les ${totalOpt} votes Oui)</span></div>
+  ${totalOpt>0 ? verdictBox(optA,optB,'Option A (2 000 000 F)','Option B (1 000 000 F)') : '<p style="font-size:12px;color:#7A9AB0;margin-bottom:10px">Aucun vote SUNU pour l\'instant.</p>'}
+  ${barRow('Option A — 2 000 000 F / 5 800 F mois', optA, totalOpt, 'vr-fill-a')}
+  ${barRow('Option B — 1 000 000 F / 5 400 F mois', optB, totalOpt, 'vr-fill-b')}
+
+  <div class="section-head">Vote 2 — MACIT en complément <span style="font-weight:400;font-size:11px;color:#7A9AB0">(${totalQ2} réponses)</span></div>
+  ${totalQ2>0 ? verdictBox(q2Oui,q2Non,'Oui — MACIT intervient en complément','Non — SUNU seule pour les décès') : '<p style="font-size:12px;color:#7A9AB0;margin-bottom:10px">Aucun vote à traiter.</p>'}
+  ${totalQ2>0 ? barRow('Oui — MACIT en complément', q2Oui, totalQ2, 'vr-fill-oui') + barRow('Non — SUNU seule', q2Non, totalQ2, 'vr-fill-non') : ''}
+
+  <div class="section-head">Détail des votes</div>`;
+
+  if (votes.length===0) {
+    html += '<p style="font-size:12px;color:#7A9AB0">Aucun vote enregistré pour le moment.</p>';
+  } else {
+    votes.forEach(v => {
+      const d = new Date(v.created_at).toLocaleDateString('fr-CI',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      const optStr = v.q1==='oui' ? ` → Option ${(v.option_sunu||'?').toUpperCase()} — MACIT complément : ${v.q2==='oui'?'Oui':'Non'}` : '';
+      html += `<div class="detail-item"><strong>${v.nom}</strong> — ${v.matricule} <span style="color:#7A9AB0">(${d})</span><br>
+        Vote SUNU : <strong>${v.q1==='oui'?'Oui':'Non'}</strong>${optStr}
+        ${v.remarques?`<br><em style="color:#7A9AB0">"${v.remarques}"</em>`:''}
+      </div>`;
+    });
+  }
+
+  html += `<div class="admin-btns">
+    <button class="btn-export" onclick="exportCSV(currentVotes)"><i class="ti ti-download"></i> Exporter CSV</button>
+    <button class="btn-reset" onclick="resetVotes()"><i class="ti ti-trash"></i> Remettre à zéro</button>
+  </div>`;
+
+  document.getElementById('admin-results').innerHTML = html;
+  window.currentVotes = votes;
+}
+
+async function resetVotes() {
+  if (!confirm('⚠️ Supprimer TOUS les votes de la base de données ? Cette action est irréversible.')) return;
+  try {
+    // Supabase: delete where id is not null (delete all)
+    const res = await fetch(SUPA_URL + '/rest/v1/votes?id=not.is.null', {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Prefer': 'return=minimal'
+      }
+    });
+    if (!res.ok) throw new Error('Erreur ' + res.status);
+    alert('✅ Tous les votes ont été supprimés.');
+    loadResults();
+  } catch(e) {
+    alert('Erreur : ' + e.message);
+  }
+}
+
+function exportCSV(votes) {
+  if (!votes || votes.length===0) { alert('Aucun vote à exporter.'); return; }
+  let csv = 'Date,Nom,Matricule,Vote SUNU,Option,MACIT complément,Remarques\n';
+  votes.forEach(v => {
+    const d = new Date(v.created_at).toLocaleDateString('fr-CI');
+    csv += `"${d}","${v.nom}","${v.matricule}","${v.q1}","${v.option_sunu||''}","${v.q2||''}","${v.remarques||''}"\n`;
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'votes_macit_sunu_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+</script>
+</body>
+</html>
